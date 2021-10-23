@@ -7,7 +7,6 @@ const router = express.Router();
 const uploadFolder = path.join(__dirname, "../upload");
 
 router.post("/", async (req, res) => {
-  console.log(uploadFolder);
   const data = await new Promise((resolve, reject) => {
     const form = new IncomingForm();
 
@@ -17,7 +16,6 @@ router.post("/", async (req, res) => {
     });
   });
 
-  console.log(data);
   const rawData = fs.readFileSync(data.files.uploadedFile.path);
 
   try {
@@ -26,7 +24,6 @@ router.post("/", async (req, res) => {
       rawData,
       function (err) {
         if (err) console.log(err);
-
         return res.status(200).json({
           status: "success",
           message: "File uploaded successfully",

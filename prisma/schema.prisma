@@ -26,8 +26,6 @@ model Post {
  
 }
 
-
-
 model Movie {
   id        Int     @default(autoincrement()) @id
   title     String?
@@ -45,12 +43,11 @@ model Movie {
 
 model Product {
   id       Int     @default(autoincrement()) @id
-  name     String?
+  name     String? @unique
   slug String?
   image    String?
   description String?
-  category    String?
-  subCategories   String[]
+  category    String[]
   size  String?
   weight  Decimal?  
   price    Decimal 
@@ -61,7 +58,6 @@ model Product {
   usage String?
   inStock Boolean @default(true) 
 }
-
 
 
 model Orders {

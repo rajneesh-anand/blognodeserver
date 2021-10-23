@@ -20,7 +20,7 @@ const readFile = async (file) => {
     console.error("Failed to read file", err);
   });
   const params = {
-    Bucket: bucketName + "/users",
+    Bucket: bucketName + "/products",
     Key: file.name,
     ContentType: file.type,
     Body: photo,
@@ -62,17 +62,19 @@ router.post("/", async (req, res, next) => {
     const imageLocation = await readFile(data.files.image);
 
     try {
-      await prisma.products.create({
+      await prisma.product.create({
         data: {
-          name: data.fields.name,
+          name: data.fields.product_name,
           description: data.fields.description,
           image: imageLocation,
-          slug: data.fields.description,
-          price: data.fields.price,
-          sellingPrice: data.fields.sale_price,
-          details: data.fields.sale_price,
-          ratings: data.fields.ratings,
-          popularity: data.fields.popularity,
+          slug: data.fields.slug,
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          price: Number(data.fields.price),
+          sellingPrice: Number(data.fields.sale_price),
+          discount: Number(data.fields.discount),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
           category: JSON.parse(data.fields.category),
         },
       });
@@ -89,16 +91,18 @@ router.post("/", async (req, res, next) => {
     }
   } else {
     try {
-      await prisma.products.create({
+      await prisma.product.create({
         data: {
-          name: data.fields.name,
+          name: data.fields.product_name,
           description: data.fields.description,
-          slug: data.fields.description,
-          price: data.fields.price,
-          sellingPrice: data.fields.sale_price,
-          details: data.fields.sale_price,
-          ratings: data.fields.ratings,
-          popularity: data.fields.popularity,
+          slug: data.fields.slug,
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          price: Number(data.fields.price),
+          sellingPrice: Number(data.fields.sale_price),
+          discount: Number(data.fields.discount),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
           category: JSON.parse(data.fields.category),
         },
       });
@@ -130,18 +134,20 @@ router.post("/:id", async (req, res, next) => {
     const imageLocation = await readFile(data.files.image);
 
     try {
-      await prisma.products.update({
+      await prisma.product.update({
         where: { id: Number(id) },
         data: {
-          name: data.fields.name,
+          name: data.fields.product_name,
           description: data.fields.description,
           image: imageLocation,
-          slug: data.fields.description,
-          price: data.fields.price,
-          sellingPrice: data.fields.sale_price,
-          details: data.fields.sale_price,
-          ratings: data.fields.ratings,
-          popularity: data.fields.popularity,
+          slug: data.fields.slug,
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          price: Number(data.fields.price),
+          sellingPrice: Number(data.fields.sale_price),
+          discount: Number(data.fields.discount),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
           category: JSON.parse(data.fields.category),
         },
       });
@@ -158,17 +164,19 @@ router.post("/:id", async (req, res, next) => {
     }
   } else {
     try {
-      await prisma.products.update({
+      await prisma.product.update({
         where: { id: Number(id) },
         data: {
-          name: data.fields.name,
+          name: data.fields.product_name,
           description: data.fields.description,
-          slug: data.fields.description,
-          price: data.fields.price,
-          sellingPrice: data.fields.sale_price,
-          details: data.fields.sale_price,
-          ratings: data.fields.ratings,
-          popularity: data.fields.popularity,
+          slug: data.fields.slug,
+          size: data.fields.size,
+          weight: Number(data.fields.weight),
+          price: Number(data.fields.price),
+          sellingPrice: Number(data.fields.sale_price),
+          discount: Number(data.fields.discount),
+          usage: data.fields.usage,
+          inStock: JSON.parse(data.fields.stock),
           category: JSON.parse(data.fields.category),
         },
       });

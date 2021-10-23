@@ -133,13 +133,14 @@ router.post("/:id", async (req, res, next) => {
       await prisma.post.update({
         where: { id: Number(id) },
         data: {
-          title: data.fields.name,
+          title: data.fields.title,
           slug: data.fields.slug,
           content: data.fields.content,
           category: data.fields.category,
           image: imageLocation,
-          published: JSON.parse(data.fields.status),
-          author: { connect: { email: data.fields.author } },
+          template: data.fields.template,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
         },
       });
       res.status(200).json({
@@ -158,12 +159,13 @@ router.post("/:id", async (req, res, next) => {
       await prisma.post.update({
         where: { id: Number(id) },
         data: {
-          title: data.fields.name,
+          title: data.fields.title,
           slug: data.fields.slug,
           content: data.fields.content,
           category: data.fields.category,
-          published: JSON.parse(data.fields.status),
-          author: { connect: { email: data.fields.author } },
+          template: data.fields.template,
+          tags: JSON.parse(data.fields.tags),
+          subCategories: JSON.parse(data.fields.subCategories),
         },
       });
       res.status(200).json({
