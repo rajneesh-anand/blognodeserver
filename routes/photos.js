@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
     {
       type: "upload",
       prefix: "victoria",
+      max_results: 100,
     },
     (error, result) => {
       if (error) {
