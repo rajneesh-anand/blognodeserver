@@ -11,11 +11,11 @@ generator client {
 
 model Post {
   id        Int     @default(autoincrement()) @id
-  title     String?
-  subCategories String[]
-  category String?
+  title     String? @unique
   slug      String?
   content   String?
+  category String?
+  subCategories String[] 
   template   String?
   tags      String[]
   image     String?
@@ -26,20 +26,6 @@ model Post {
  
 }
 
-model Movie {
-  id        Int     @default(autoincrement()) @id
-  title     String?
-  categories String[]
-  slug      String?
-  media   String?
-  poster   String?
-  time   String?  
-  createdAt     DateTime  @default(now()) 
-  status Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
- 
-}
 
 model Product {
   id       Int     @default(autoincrement()) @id
@@ -47,7 +33,7 @@ model Product {
   slug String?
   image    String?
   description String?
-  category    String[]
+  category    String[]  
   size  String?
   weight  Decimal?  
   price    Decimal 
@@ -60,23 +46,23 @@ model Product {
 }
 
 
-model Orders {
+
+model Order {
   id        Int     @default(autoincrement()) @id
-  OrderNumber     String?
-  Name        String
-  Email       String
-  Contact String?
-  Address   String[]
-  TotalProducts Int
-  Amount Decimal
-  Tax Decimal?
-  ShippingCharge  Decimal ?
-  TotalAmount Decimal
-  ProductDetails String[]
-  PaymentID String?
+  orderNumber     String?
+  name        String
+  email       String
+  contact String?
+  address   String[]
+  totalProducts Int
+  amount Decimal
+  tax Decimal?
+  shippingCharge  Decimal ?
+  totalAmount Decimal
+  productDetails String[]
+  paymentID String?
   PaymentStatus String ?
-  createdAt     DateTime  @default(now()) 
-  
+  createdAt     DateTime  @default(now())  
  
 }
 
@@ -89,8 +75,7 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   posts         Post[]
-  movies        Movie[]
-
+  
   @@map(name: "users")
 }
 
@@ -133,7 +118,6 @@ model VerificationRequest {
   expires    DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
   @@unique([identifier, token])
 
   
