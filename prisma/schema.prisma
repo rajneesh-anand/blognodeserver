@@ -19,6 +19,7 @@ model Post {
   template   String?
   tags      String[]
   image     String?
+  readingTime String?
   createdAt     DateTime  @default(now()) 
   published Boolean @default(false)
   author    User?   @relation(fields: [authorId], references: [id])
