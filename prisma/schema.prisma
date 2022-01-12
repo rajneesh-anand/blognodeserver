@@ -9,6 +9,28 @@ generator client {
 }
 
 
+
+model Student {
+  id        Int     @default(autoincrement()) @id
+  firstName     String
+  lastName   String?
+  address   String ?
+  city  String?
+  state String?
+  pinCode String?
+  contact String?
+  email String?
+  schoolName String ?
+  photo String?
+  class String?
+  stream String?
+  message String?
+  subjects String[]
+  enrollmentDate DateTime  @default(now())
+  
+}
+
+
 model Post {
   id        Int     @default(autoincrement()) @id
   title     String? @unique
