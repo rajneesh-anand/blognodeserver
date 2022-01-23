@@ -12,6 +12,7 @@ const testinomial = require("./routes/testinomial");
 const blog = require("./routes/blog");
 const payment = require("./routes/payment");
 const enrollment = require("./routes/enrollment");
+const auth = require("./routes/auth");
 
 require("dotenv").config();
 
@@ -23,6 +24,7 @@ var allowedDomains = [
   "https://kokeliko.vercel.app",
   "https://vedas.vercel.app",
   "http://localhost:3000",
+  "https://www.tswan.club",
 ];
 app.use(
   cors({
@@ -55,6 +57,7 @@ app.use("/api/testinomial", testinomial);
 app.use("/api/blog", blog);
 app.use("/api/payment", payment);
 app.use("/api/enrollment", enrollment);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 8080;
 
