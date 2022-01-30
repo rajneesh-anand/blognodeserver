@@ -1,6 +1,7 @@
-const { hashSync, genSaltSync, compareSync } = require("bcrypt");
+const { hashSync, genSaltSync } = require("bcrypt");
 const { validationResult } = require("express-validator");
 const prisma = require("../lib/prisma");
+const jwt = require("jsonwebtoken");
 
 exports.userSignupController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -20,6 +21,18 @@ exports.userSignupController = async (req, res) => {
   });
 
   if (user == 0) {
+    const token = jwt.sign(
+      {
+        name: name,
+        email: email,
+        picture: "/images/default-profile.svg",
+        iat: new Date().getTime(),
+        exp: 30 * 24 * 60 * 60,
+      },
+      process.env.SECRET
+    );
+    console.log(token);
+
     try {
       await prisma.user.create({
         data: {
@@ -29,7 +42,7 @@ exports.userSignupController = async (req, res) => {
         },
       });
       res.status(200).json({
-        message: "sign up success",
+        message: "success",
       });
     } catch (error) {
       console.log(error);

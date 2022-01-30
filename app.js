@@ -13,6 +13,7 @@ const blog = require("./routes/blog");
 const payment = require("./routes/payment");
 const enrollment = require("./routes/enrollment");
 const auth = require("./routes/auth");
+const student = require("./routes/students");
 
 require("dotenv").config();
 
@@ -22,7 +23,7 @@ app.use(express.json());
 
 var allowedDomains = [
   "https://kokeliko.vercel.app",
-  "https://vedas.vercel.app",
+  "https://www.vedusone.com",
   "http://localhost:3000",
   "https://www.tswan.club",
 ];
@@ -58,6 +59,7 @@ app.use("/api/blog", blog);
 app.use("/api/payment", payment);
 app.use("/api/enrollment", enrollment);
 app.use("/api/auth", auth);
+app.use("/api/students", student);
 
 const port = process.env.PORT || 8080;
 
