@@ -64,4 +64,21 @@ const registerPerson = async (req, res) => {
   }
 };
 
-module.exports = registerPerson;
+const fetchPerson = async (req, res) => {
+  try {
+    const result = await prisma.person.findMany();
+    return res.status(200).json({
+      msg: "success",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  } finally {
+    async () => {
+      await prisma.$disconnect();
+    };
+  }
+};
+
+module.exports = { registerPerson, fetchPerson };
