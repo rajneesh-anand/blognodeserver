@@ -66,7 +66,13 @@ const registerPerson = async (req, res) => {
 
 const fetchPerson = async (req, res) => {
   try {
-    const result = await prisma.person.findMany();
+    const result = await prisma.person.findMany({
+      orderBy: [
+        {
+          id: "asc",
+        },
+      ],
+    });
     return res.status(200).json({
       msg: "success",
       data: result,
