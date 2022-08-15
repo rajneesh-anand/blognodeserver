@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 const upload = require("./routes/upload");
 const publish = require("./routes/publish");
 const post = require("./routes/post");
@@ -14,6 +16,8 @@ const payment = require("./routes/payment");
 const enrollment = require("./routes/enrollment");
 const auth = require("./routes/auth");
 const student = require("./routes/students");
+const video = require("./routes/video");
+const person = require("./routes/person");
 
 require("dotenv").config();
 
@@ -21,31 +25,33 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var allowedDomains = [
-  "https://kokeliko.vercel.app",
-  "https://www.vedusone.com",
-  "http://localhost:3000",
-  "https://www.tswan.club",
-];
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-
-      if (allowedDomains.indexOf(origin) === -1) {
-        var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-  })
-);
-
+// var allowedDomains = [
+//   "https://kokeliko.vercel.app",
+//   "https://www.vedusone.com",
+//   "http://localhost:3000",
+//   "https://www.tswan.club",
+// ];
 // app.use(
 //   cors({
-//     origin: "*",
+//     origin: function (origin, callback) {
+//       if (!origin) return callback(null, true);
+
+//       if (allowedDomains.indexOf(origin) === -1) {
+//         var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
+//         return callback(new Error(msg), false);
+//       }
+//       return callback(null, true);
+//     },
 //   })
 // );
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+app.use(cookieParser());
+
 app.use("/api/upload", upload);
 app.use("/api/publish", publish);
 app.use("/api/post", post);
@@ -60,6 +66,8 @@ app.use("/api/payment", payment);
 app.use("/api/enrollment", enrollment);
 app.use("/api/auth", auth);
 app.use("/api/students", student);
+app.use("/api/video", video);
+app.use("/api/person", person);
 
 const port = process.env.PORT || 8080;
 

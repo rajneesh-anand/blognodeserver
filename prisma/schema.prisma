@@ -31,6 +31,27 @@ model Student {
 }
 
 
+model Person {
+  id        Int     @default(autoincrement()) @id
+  first     String
+  last   String?
+  addressOne   String ?
+  addressTwo  String?
+  city  String?
+  state String?
+  zip String?
+  contact String?
+  email String?
+  password String ?
+  photo String?
+  gender String?  
+  createdAt DateTime   @default(now()) @map(name: "created_at")  
+}
+
+
+
+
+
 model Post {
   id        Int     @default(autoincrement()) @id
   title     String? @unique
@@ -144,4 +165,18 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+
+model FcmToken{
+   id                 Int     @default(autoincrement()) @id
+   token              String
+   userUniqueId       String  @map(name: "user_unique_id")
+   appVersion         String  @map(name: "app_version")
+   osVersion         String  @map(name: "os_version")
+   deviceModel        String  @map(name: "device_model")
+   deviceManufacturer  String  @map(name: "device_manufacturer")
+   date               DateTime  @default(now())
+
+
 }
