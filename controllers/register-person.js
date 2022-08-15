@@ -87,4 +87,57 @@ const fetchPerson = async (req, res) => {
   }
 };
 
-module.exports = { registerPerson, fetchPerson };
+const updatePerson = async (req, res) => {
+  const id = req.params.id;
+  const {
+    email,
+    password,
+    first,
+    last,
+    city,
+    zip,
+    state,
+    addressOne,
+    addressTwo,
+    contact,
+    gender,
+  } = req.body;
+  console.log(req.body);
+  console.log(id);
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    await prisma.person.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        first: first,
+        last: last,
+        addressOne: addressOne,
+        addressTwo: addressTwo,
+        city: city,
+        state: state,
+        zip: zip,
+        contact: contact,
+        gender: gender,
+      },
+    });
+    return res.status(200).json({
+      msg: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  } finally {
+    async () => {
+      await prisma.$disconnect();
+    };
+  }
+};
+
+module.exports = { registerPerson, fetchPerson, updatePerson };
