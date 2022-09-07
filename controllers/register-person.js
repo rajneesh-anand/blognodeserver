@@ -102,8 +102,6 @@ const updatePerson = async (req, res) => {
     contact,
     gender,
   } = req.body;
-  console.log(req.body);
-  console.log(id);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -140,4 +138,27 @@ const updatePerson = async (req, res) => {
   }
 };
 
-module.exports = { registerPerson, fetchPerson, updatePerson };
+const deletePerson = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await prisma.person.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return res.status(200).json({
+      msg: "user deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  } finally {
+    async () => {
+      await prisma.$disconnect();
+    };
+  }
+};
+
+module.exports = { registerPerson, fetchPerson, updatePerson, deletePerson };
