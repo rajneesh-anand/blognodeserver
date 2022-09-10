@@ -3,6 +3,7 @@ const { IncomingForm } = require("formidable");
 const fs = require("fs");
 const prisma = require("../lib/prisma");
 const router = express.Router();
+const verifyToken = require("../middleware/auth");
 var AWS = require("aws-sdk");
 
 const bucketName = process.env.S3_BUCKET;
@@ -192,6 +193,10 @@ router.post("/:id", async (req, res, next) => {
       };
     }
   }
+});
+
+router.get("/", verifyToken, (req, res) => {
+  res.status(200).json({ data: "success" });
 });
 
 module.exports = router;

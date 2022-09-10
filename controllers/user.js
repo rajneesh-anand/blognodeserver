@@ -1,8 +1,20 @@
 const { hash, genSalt } = require("bcrypt");
 const prisma = require("../lib/prisma");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
-const registerPerson = async (req, res) => {
+const createToken = (user) => {
+  return new Promise((resolve, reject) => {
+    const { id, first, email } = user;
+    resolve(
+      jwt.sign({ id, first, email }, process.env.SECRET, {
+        expiresIn: "30m",
+      })
+    );
+  });
+};
+
+const registerUser = async (req, res) => {
   const {
     email,
     password,
@@ -32,10 +44,10 @@ const registerPerson = async (req, res) => {
   });
 
   if (person > 0) {
-    return res.status(403).json({ msg: "Email adreess already in use !" });
+    return res.status(401).json({ msg: "Email adreess already in use !" });
   } else {
     try {
-      await prisma.person.create({
+      const user = await prisma.person.create({
         data: {
           first: first,
           last: last,
@@ -50,12 +62,13 @@ const registerPerson = async (req, res) => {
           gender: gender,
         },
       });
-      return res.status(200).json({
-        msg: "success",
-      });
+
+      const token = await createToken(user);
+      console.log(token);
+      return res.status(200).json({ first, email, token });
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ error: error.message });
+      return res.status(401).json({ error: error.message });
     } finally {
       async () => {
         await prisma.$disconnect();
@@ -64,7 +77,7 @@ const registerPerson = async (req, res) => {
   }
 };
 
-const fetchPerson = async (req, res) => {
+const fetchUser = async (req, res) => {
   try {
     const result = await prisma.person.findMany({
       orderBy: [
@@ -87,7 +100,7 @@ const fetchPerson = async (req, res) => {
   }
 };
 
-const updatePerson = async (req, res) => {
+const updateUser = async (req, res) => {
   const id = req.params.id;
   const {
     email,
@@ -138,7 +151,7 @@ const updatePerson = async (req, res) => {
   }
 };
 
-const deletePerson = async (req, res) => {
+const deleteUser = async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -161,4 +174,4 @@ const deletePerson = async (req, res) => {
   }
 };
 
-module.exports = { registerPerson, fetchPerson, updatePerson, deletePerson };
+module.exports = { registerUser, fetchUser, updateUser, deleteUser };

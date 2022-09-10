@@ -1,4 +1,5 @@
 const prisma = require("../lib/prisma");
+const jwt = require("jsonwebtoken");
 
 function extractToken(req) {
   if (
@@ -13,29 +14,40 @@ function extractToken(req) {
 }
 
 const verifyToken = async (req, res, next) => {
-  const token = extractToken(req);
-  // req.body.token || req.query.token || req.headers["x-access-token"];
-  // console.log(token);
+  const token = await extractToken(req);
 
   if (!token) {
-    return res
-      .status(401)
-      .json({ error: "Unauthorized access - No apiKey found" });
+    console.log(`no token`);
+    return res.status(403).json({ error: "Unauthorized access !" });
   }
+
   try {
-    const result = await prisma.session.findMany({
-      where: {
-        sessionToken: token,
-      },
-    });
-    if (token === result[0].sessionToken) {
-      return next();
-    } else {
-      throw new Error();
-    }
+    // const result = await prisma.session.findMany({
+    //   where: {
+    //     sessionToken: token,
+    //   },
+    // });
+    // if (token === result[0].sessionToken) {
+    //   return next();
+    // } else {
+    //   throw new Error();
+    // }
+
+    jwt.verify(
+      token,
+      process.env.SECRET,
+      { algorithms: "HS256" },
+      function (err, payload) {
+        if (err) {
+          throw new Error();
+        }
+        return next();
+      }
+    );
   } catch (err) {
     console.log(err);
     return res.status(403).json({ access: "Forbidden" });
   }
 };
+
 module.exports = verifyToken;

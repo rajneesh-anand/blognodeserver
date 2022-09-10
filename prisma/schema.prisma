@@ -1,14 +1,11 @@
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-
 
 model Student {
   id        Int     @default(autoincrement()) @id
@@ -17,39 +14,17 @@ model Student {
   address   String ?
   city  String?
   state String?
-  pinCode String?
+  zip String?
   contact String?
   email String?
   schoolName String ?
   photo String?
   class String?
   stream String?
-  message String?
-  subjects String[]
-  enrollmentDate DateTime  @default(now())
-  
+  gender String? 
+  birthDate String?
+  enrollmentDate DateTime  @default(now())  
 }
-
-
-model Person {
-  id        Int     @default(autoincrement()) @id
-  first     String
-  last   String?
-  addressOne   String ?
-  addressTwo  String?
-  city  String?
-  state String?
-  zip String?
-  contact String?
-  email String?
-  password String ?
-  photo String?
-  gender String?  
-  createdAt DateTime   @default(now()) @map(name: "created_at")  
-}
-
-
-
 
 
 model Post {
@@ -70,7 +45,6 @@ model Post {
  
 }
 
-
 model Product {
   id       Int     @default(autoincrement()) @id
   name     String? @unique
@@ -88,8 +62,6 @@ model Product {
   usage String?
   inStock Boolean @default(true) 
 }
-
-
 
 model Order {
   id        Int     @default(autoincrement()) @id
@@ -111,21 +83,17 @@ model Order {
 }
 
 model User {
-   id            Int     @default(autoincrement()) @id
+  id            Int     @default(autoincrement()) @id
   name          String?
   email         String?   @unique
   password      String?
-  emailVerified DateTime? 
+  emailVerified DateTime?
   image         String?
-  userRole      String?   @default("User")
   createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at") 
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
-
-
-
+  verificationTokens    VerificationToken[]
 }
 
 model Account {
@@ -160,23 +128,11 @@ model Session {
 
 
 model VerificationToken {
-  identifier String
+  id         Int     @default(autoincrement()) @id
+  identifier String?
+  userId     Int?
   token      String   @unique
-  expires    DateTime
-
+  expires    DateTime?   
+  user User? @relation(fields: [userId], references: [id])
   @@unique([identifier, token])
-}
-
-
-model FcmToken{
-   id                 Int     @default(autoincrement()) @id
-   token              String
-   userUniqueId       String  @map(name: "user_unique_id")
-   appVersion         String  @map(name: "app_version")
-   osVersion         String  @map(name: "os_version")
-   deviceModel        String  @map(name: "device_model")
-   deviceManufacturer  String  @map(name: "device_manufacturer")
-   date               DateTime  @default(now())
-
-
 }
