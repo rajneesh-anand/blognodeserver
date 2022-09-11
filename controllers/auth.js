@@ -62,7 +62,7 @@ exports.signUpUser = async (req, res) => {
 
         return res.status(200).json({ message: "success" });
       } else {
-        await prisma.student.create({
+        await prisma.user.create({
           data: {
             name: data.fields.name,
             email: data.fields.email,
